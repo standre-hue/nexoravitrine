@@ -21,8 +21,9 @@ export default function Home() {
         },
         body: JSON.stringify({ email }),
       });
+      response = await response.json();
   
-      if(response.ok){
+      if(response.status == 200){
         setMessage("Thank you for joining the list 🚀");
         setEmail("");
       }
