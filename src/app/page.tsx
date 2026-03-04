@@ -1,6 +1,58 @@
+'use client';
+
+import { useState } from 'react';
 import Image from "next/image";
 
 export default function Home() {
+
+    const [email, setEmail] = useState("");
+    const [message, setMessage] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try{
+      let response = await fetch("/api/waitlist", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+  
+      if(response.ok){
+        setEmail("You're on the list 🚀");
+        setEmail("");
+      }
+      else{
+        setMessage("Error while joining the waitlis, please try again later.");
+  
+      }
+    }
+    catch(error){
+      console.error(error)
+      setMessage("Error while joining the waitlist, please try again later.");
+    }
+
+    finally{
+      setIsLoading(false);
+    }
+
+
+  };
+
+  const CircularProgress = () => {
+  const _className = `animate-spin rounded-full border-1 border-gray-300 border-t-blue-600 w-6 h-6 m-0 p-0`
+  return (
+    <div className={_className}>
+    </div>
+  );
+
+}
+  
+
   return (
 <>
 
@@ -34,14 +86,21 @@ export default function Home() {
 <section id="waitlist" className="waitlist">
   <h2>Join the Waitlist</h2>
   <p>Be the first to access Nexora when we launch.</p>
-  <form>
-    <input type="email" placeholder="Enter your email" required />
-    <button type="submit" className="btn">Join</button>
+  <form onSubmit={handleSubmit} className=" max-h-[80px] flex justify-center items-center gap-2 rounded-lg overflow-hidden">
+    <input type="email" placeholder="Enter your email" required         
+        value={email}
+        onChange={(e) => setEmail(e.target.value)} />
+    <button disabled={isLoading} type="submit" className="btn">
+      {
+        isLoading ? <CircularProgress  /> : "Join"
+      }
+      </button>
   </form>
+  <p style={{ marginTop:"20px" }}>{message}</p>
 </section>
 
 <footer>
-  © 2026 Nexora. Built for developers.
+  © {new Date().getFullYear()} Nexora. Built for developers.
 </footer>
 
 </>
