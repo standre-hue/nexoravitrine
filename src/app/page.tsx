@@ -23,7 +23,7 @@ export default function Home() {
       });
   
       if(response.ok){
-        setEmail("You're on the list 🚀");
+        setMessage("Thank you for joining the list 🚀");
         setEmail("");
       }
       else{
