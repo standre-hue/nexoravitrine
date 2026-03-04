@@ -28,6 +28,7 @@ export default function Home() {
         setEmail("");
       }
       else{
+        console.error(response);
         setMessage("Error while joining the waitlis, please try again later.");
   
       }
